@@ -31,6 +31,9 @@ module.exports = {
       comment: {
         type: Sequelize.STRING
       },
+      categories: {
+        type: Sequelize.STRING
+      },
       storageId: {
         type: Sequelize.INTEGER,
         allowNull: false,

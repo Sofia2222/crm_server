@@ -24,13 +24,6 @@ app.use(cors({
 app.use('/auth', authRouter);
 app.use('/api/product', productRouter);
 
-// app.post("/login", async (req, res) => {
-//
-//     const tenant = await database.createTenant({name: 'myk', lastName: 'nychy', phone: '38283832832', subdomain: 'optimarket'})
-//     database.setCurrentORM(tenant.subdomain)
-//
-//     res.status(200).send({})
-// })
 
 const start = async () => {
     app.listen(PORT, () =>{console.log(`server start on ${PORT} port`)})

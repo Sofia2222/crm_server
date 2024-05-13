@@ -1,10 +1,11 @@
-const productService = require("../services/productService")
+const contactService = require("../services/contactService");
+const constants = require("../../constants");
 const {Conflict} = require("../utils/Errors");
 
-class ProductController {
+class ContactController {
     async getProducts(req, res) {
         try{
-            const products = await productService.getProducts();
+            const products = await contactService.getContacts();
             return res.status(200).json({products});
         }catch (e) {
             res.status(e.status).json({error: e.error});
@@ -16,7 +17,7 @@ class ProductController {
             if (id <= 0){
                 throw new Conflict("Не коректно введений id");
             }
-            const product = await productService.getProductById(id);
+            const product = await contactService.getContactById(id);
             return res.status(200).json({product: product || {}});
         }catch (e) {
             console.log(e)
@@ -27,7 +28,7 @@ class ProductController {
         try{
             const {limit, offset} = req.params;
             console.log(limit, offset)
-            const product = await productService.getProductsByLimit({limit, offset});
+            const product = await contactService.getContactsByLimit({limit, offset});
             return res.status(200).json({product});
         }catch (e) {
             console.log(e)
@@ -39,7 +40,7 @@ class ProductController {
             const userPayload = req.userPayload;
             const {title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories} = req.body;
 
-            const product = await productService.createProduct({
+            const product = await contactService.createContact({
                 title, titleForDocuments, price, firstCost,
                 sale, dateSale, comment, categories,
                 storageId: 1}); //TODO: storage
@@ -54,7 +55,7 @@ class ProductController {
             const userPayload = req.userPayload;
             const {id, title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories} = req.body;
 
-            const product = await productService.updateProduct({
+            const product = await contactService.updateContact({
                 id, title, titleForDocuments, price, firstCost,
                 sale, dateSale, comment, categories,
                 storageId: 1}); //TODO: from payload
@@ -70,13 +71,12 @@ class ProductController {
             if (id <= 0){
                 throw new Conflict("Не коректно введений id");
             }
-            const product = await productService.deleteProduct(id);
+            const product = await contactService.deleteContact(id);
             return res.status(200).json({product});
         }catch (e) {
             res.status(e.status).json({error: e.error});
         }
     }
-
 }
 
-module.exports = new ProductController();
+module.exports = new ContactController();

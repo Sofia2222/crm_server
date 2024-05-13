@@ -1,4 +1,4 @@
-const {authService} = require("../services");
+const authService = require("../services/authService");
 const constants = require("../../constants");
 
 class AuthController {
@@ -39,24 +39,6 @@ class AuthController {
         }
     }
 
-    async signUp(req, res){
-        try{
-            // await sequelize.transaction(async ()=>{ \\TODO
-            //     const {name, surname, phone, email, password, domain} = req.body;
-            //     const {fingerprint} = req;
-            //     const {
-            //         accessToken,
-            //         refreshToken,
-            //         accessTokenExpiration
-            //     } = await authService.signUp({name, surname, phone, email, password, domain, fingerprint});
-            //     res.cookie('refreshToken', refreshToken, constants.COOKIE_SETTINGS)
-            //     res.status(200).json({accessToken, accessTokenExpiration});
-            // })
-        }catch (e) {
-            console.log(e)
-            res.status(e.status).json(e.error);
-        }
-    }
     async logout(req, res){
         try{
             const {refreshToken} = req.cookie;

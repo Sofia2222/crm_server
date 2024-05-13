@@ -42,6 +42,9 @@ module.exports = (sequelize, DataTypes) => {
     comment: {
       type: DataTypes.STRING
     },
+    categories: {
+      type: DataTypes.STRING
+    },
     storageId: {
       type: DataTypes.INTEGER,
       allowNull: false,

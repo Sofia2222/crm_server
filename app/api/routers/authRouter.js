@@ -1,6 +1,6 @@
 const {authController} = require("../controllers");
 const authRouter = require('express').Router();
-const { tokenServices } = require('../services')
+const tokenServices = require('../services/tokenService')
 const { body } = require('express-validator');
 const { error_validation_middleware } = require("../../middlewares");
 const { singlify, tenantify} = require("../../database/models");
