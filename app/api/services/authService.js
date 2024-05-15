@@ -60,7 +60,7 @@ class AuthService {
         database.setCurrentORM(tenant.subdomain);
 
         const role = 'ADMIN';
-        const storage = await storageService.createStorage(subdomain)
+        const storage = await storageService.create(subdomain)
         const user = await userService.createUser(
             {firstName, lastName, email, password, role, storageId: storage.id, subdomain, fingerprint}
         )

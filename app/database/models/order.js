@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         })
     }
   }
+  //storageId, userId, contactId, productsId, comment
   Order.init({
     id: {
       allowNull: false,
@@ -35,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    productsId: {
+    productsId: { // TODO ids
       type: DataTypes.JSON,
       allowNull: false,
     },

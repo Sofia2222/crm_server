@@ -1,41 +1,30 @@
-const constants = require("../../constants");
 const {db} = require("../../database/models");
 
 class ContactService {
-    async getContacts() {
+    async getAll() {
         return await db().Contact.findAll();
     }
-    async getContactById(id) {
+    async getById(id) {
         return await db().Contact.findOne({where: [{id: id}]});
     }
-    async getContactsByLimit({limit, offset}){
+    async getByLimit({limit, offset}){
         return await db().Contact.findAll({limit: limit, offset: offset});
     }
-    async createContact({
-                            title,
-                            titleForDocuments,
-                            price,
-                            firstCost,
-                            sale,
-                            dateSale,
-                            comment,
-                            categories,
-                            storageId
-                        })
+    async create({firstName, lastName, middleName, phone, email, comment, storageId})
     {
         return await db().Contact.create(
-            {title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories, storageId}
+            {firstName, lastName, middleName, phone, email, comment, storageId}
         );
     }
-    async updateContact({id, title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories, storageId}) {
+    async update({id, firstName, lastName, middleName, phone, email, comment, storageId}) {
         return await db().Contact.update(
-            {title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories, storageId},
+            {firstName, lastName, middleName, phone, email, comment, storageId},
             {
                 where: {id: id}
             }
         );
     }
-    async deleteContact(id){
+    async delete(id){
         return await db().Contact.destroy(
             {where: [{id: id}]}
         );

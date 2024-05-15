@@ -1,16 +1,16 @@
 const {db} = require("../../database/models");
 
 class ProductService {
-    async getProducts() {
+    async getAll() {
         return await db().Product.findAll();
     }
-    async getProductById(id) {
+    async getById(id) {
         return await db().Product.findOne({where: [{id: id}]});
     }
-    async getProductsByLimit({limit, offset}){
+    async getByLimit({limit, offset}){
         return await db().Product.findAll({limit: limit, offset: offset});
     }
-    async createProduct({
+    async create({
             title,
             titleForDocuments,
             price,
@@ -26,7 +26,7 @@ class ProductService {
             {title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories, storageId}
         );
     }
-    async updateProduct({id, title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories, storageId}) {
+    async update({id, title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories, storageId}) {
         return await db().Product.update(
             {title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories, storageId},
             {
@@ -34,7 +34,7 @@ class ProductService {
             }
         );
     }
-    async deleteProduct(id){
+    async delete(id){
         return await db().Product.destroy(
             {where: [{id: id}]}
         );

@@ -1,80 +1,80 @@
 const contactService = require("../services/contactService");
-const constants = require("../../constants");
 const {Conflict} = require("../utils/Errors");
 
 class ContactController {
-    async getProducts(req, res) {
+    async getContacts(req, res) {
         try{
-            const products = await contactService.getContacts();
-            return res.status(200).json({products});
+            const contacts = await contactService.getAll();
+            return res.status(200).json({contacts});
         }catch (e) {
-            res.status(e.status).json({error: e.error});
+            console.log(e)
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
-    async getProductById(req, res) {
+    async getContactById(req, res) {
         try{
             const {id} = req.params;
             if (id <= 0){
                 throw new Conflict("Не коректно введений id");
             }
-            const product = await contactService.getContactById(id);
-            return res.status(200).json({product: product || {}});
+            const contact = await contactService.getById(id);
+            return res.status(200).json({contact: contact || {}});
         }catch (e) {
             console.log(e)
-            res.status(400).json({error: e.error});
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
-    async getProductsByLimit(req, res) {
+    async getContactsByLimit(req, res) {
         try{
             const {limit, offset} = req.params;
             console.log(limit, offset)
-            const product = await contactService.getContactsByLimit({limit, offset});
-            return res.status(200).json({product});
+            const contact = await contactService.getByLimit({limit, offset});
+            return res.status(200).json({contact});
         }catch (e) {
             console.log(e)
-            res.status(e.status).json({error: e.error});
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
-    async createProduct(req, res) {
+    async createContact(req, res) {
         try{
             const userPayload = req.userPayload;
-            const {title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories} = req.body;
+            const {firstName, lastName, middleName, phone, email, comment} = req.body;
 
-            const product = await contactService.createContact({
-                title, titleForDocuments, price, firstCost,
-                sale, dateSale, comment, categories,
+            const contact = await contactService.create({
+                firstName, lastName, middleName, phone, email, comment,
                 storageId: 1}); //TODO: storage
-            return res.status(200).json({});
+            return res.status(200).json({contact});
         }catch (e) {
             console.log(e)
-            res.status(e.status).json({error: e.error});
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
-    async updateProduct(req, res) {
+    async updateContact(req, res) {
         try{
             const userPayload = req.userPayload;
-            const {id, title, titleForDocuments, price, firstCost, sale, dateSale, comment, categories} = req.body;
+            const {id, firstName, lastName, middleName, phone, email, comment} = req.body;
 
-            const product = await contactService.updateContact({
-                id, title, titleForDocuments, price, firstCost,
-                sale, dateSale, comment, categories,
+            const contact = await contactService.update({
+                id, firstName, lastName, middleName, phone, email, comment,
                 storageId: 1}); //TODO: from payload
 
-            return res.status(200).json({product});
+            return res.status(200).json({contact});
         }catch (e) {
-            res.status(e.status).json({error: e.error});
+            console.log(e)
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
-    async deleteProduct(req, res){
+    async deleteContact(req, res){
         try{
             const {id} = req.body;
             if (id <= 0){
                 throw new Conflict("Не коректно введений id");
             }
-            const product = await contactService.deleteContact(id);
-            return res.status(200).json({product});
+            const contact = await contactService.delete(id);
+            return res.status(200).json({contact});
         }catch (e) {
-            res.status(e.status).json({error: e.error});
+            console.log(e)
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
 }

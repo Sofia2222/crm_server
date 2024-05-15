@@ -17,7 +17,7 @@ class AuthController {
             res.status(200).json({accessToken, accessTokenExpiration});
         }catch (e) {
             console.log(e)
-            res.status(400).json(e);
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
 
@@ -35,7 +35,7 @@ class AuthController {
             res.status(200).json({accessToken, accessTokenExpiration});
         }catch (e) {
             console.log(e)
-            res.status(500).json(e);
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
 
@@ -48,7 +48,7 @@ class AuthController {
             res.status(200).json();
         }catch (e) {
             console.log(e)
-            res.status(e.status).json(e.error);
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
     async refresh(req, res){
@@ -64,7 +64,7 @@ class AuthController {
             res.status(200).json({newAccessToken, accessTokenExpiration});
         }catch (e) {
             console.log(e)
-            res.status(e.status).json(e.error);
+            res.status(e.status || 500).json({error: e.error, e});
         }
     }
 }

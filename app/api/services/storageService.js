@@ -2,7 +2,7 @@ const { Conflict} = require("../utils/Errors");
 const {db} = require("../../database/models");
 
 class StorageService {
-    async createStorage(storageName){
+    async create(storageName){
         const candidateStorage = await db().Storage.findOne({
             where: [{
                 'storageName': storageName

@@ -3,9 +3,8 @@ const express = require('express');
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const PORT = 5000;
-const { authRouter, productRouter} = require("./api/routers");
+const { authRouter, productRouter, contactRouter, orderRouter, blackBoxRouter, novaPoshtaRouter} = require("./api/routers");
 const Fingerprint = require('express-fingerprint')
-const {database, db} = require("./database/models");
 const app = express();
 
 
@@ -23,7 +22,10 @@ app.use(cors({
 
 app.use('/auth', authRouter);
 app.use('/api/product', productRouter);
-
+app.use('/api/contact', contactRouter);
+app.use('/api/order', orderRouter);
+app.use('/api/blackBox', blackBoxRouter);
+app.use('/api/novaPoshta', novaPoshtaRouter);
 
 const start = async () => {
     app.listen(PORT, () =>{console.log(`server start on ${PORT} port`)})
