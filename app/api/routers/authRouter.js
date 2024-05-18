@@ -22,6 +22,7 @@ const { singlify, tenantify} = require("../../database/models");
 
 authRouter.post(
     '/signIn',
+    singlify,
     authController.signIn
 );
 authRouter.post(
@@ -30,8 +31,8 @@ authRouter.post(
     authController.signUpTenant
 );
 
-authRouter.post('/logout', authController.logout);
-authRouter.get('/refresh', authController.refresh);
+authRouter.post('/logout', tenantify, authController.logout);
+authRouter.get('/refresh', tenantify, authController.refresh);
 
 // body('name').notEmpty().withMessage(`Поле ім'я порожнє`).escape().isString().trim(),
 //     body('surname').notEmpty().withMessage('Поле призвище порожнє').escape().isString().trim(),

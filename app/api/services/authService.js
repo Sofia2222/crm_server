@@ -75,6 +75,7 @@ class AuthService {
     };
 
     async refresh({curRefreshToken,fingerprint}){
+        console.log(curRefreshToken)
         if (!curRefreshToken){
             throw new Unauthorized();
         }
@@ -100,13 +101,13 @@ class AuthService {
         }
         const user = await db().User.findOne({
             where: [{
-                'id': payload.user_id
+                'id': payload.userId
             }]
         });
-        let actualPayload = {user_id: user.id, company_id: user.company_id}
+        let actualPayload = {userId: user.id, storageId: user.storageId}
         const newAccessToken = await tokenService.generateAccessToken(actualPayload);
         const newRefreshToken = await tokenService.generateRefreshToken(actualPayload);
-        const newToken = new db().Token({user_id: user.id, token: newRefreshToken, fingerprint: fingerprint.hash});
+        const newToken = await db().Token.create({userId: user.id, token: newRefreshToken, fingerprint: fingerprint.hash});
         await newToken.save()
         return {
             newAccessToken,

@@ -5,13 +5,13 @@ class AuthController {
 
     async signIn(req, res){
         try{
-            const {email, password, domain} = req.body;
+            const {email, password, subdomain} = req.body;
             const {fingerprint} = req;
             const {
                 accessToken,
                 refreshToken,
                 accessTokenExpiration
-            } = await authService.signIn({email, password, domain, fingerprint});
+            } = await authService.signIn({email, password, subdomain, fingerprint});
             console.log(refreshToken)
             res.cookie('refreshToken', refreshToken, constants.COOKIE_SETTINGS)
             res.status(200).json({accessToken, accessTokenExpiration});
@@ -24,6 +24,7 @@ class AuthController {
     async signUpTenant(req, res) {
         try{
             const {firstName, lastName, email, phone, password, subdomain} = req.body;
+            console.log(firstName, lastName, email, phone, password, subdomain)
             const {fingerprint} = req;
             const {
                 accessToken,
