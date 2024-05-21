@@ -30,8 +30,38 @@ class OrderService {
         );
     }
 
-    async getTableOrders({limit, offset}){
+    async getTableOrders(){
 
+        const result = []
+        const orders = await db().Order.findAll({
+            include: [
+                {
+                    model: await db().Contact,
+                    attributes: ['firstName', 'lastName', 'middleName', 'email'],
+                },
+                {
+                    model: await db().Delivery,
+                    attributes: ['city', 'warehouse'],
+                }
+            ]
+        })
+        //TODO:
+        console.log(orders[0].dataValues.Contact.dataValues)
+        console.log(orders[0].dataValues.Delivery.dataValues)
+
+        for(const order of orders){
+            console.log(order)
+            result.push({
+                numberOrder: order.dataValues.id,
+                createdAt: order.dataValues.createdAt,
+                pib: `${order.dataValues.Contact.dataValues.firstName} ${order.dataValues.Contact.dataValues.lastName} ${order.dataValues.Contact.dataValues.middleName}`,
+                products: {},
+                status: order.dataValues.status,
+                suma: '',
+                delivery: `${order?.dataValues?.Delivery?.dataValues?.city} ${order.dataValues.Delivery.dataValues.warehouse}`,
+            });
+        }
+        return result;
     }
 }
 
