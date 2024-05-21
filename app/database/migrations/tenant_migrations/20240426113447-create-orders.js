@@ -22,12 +22,18 @@ module.exports = {
         allowNull: false,
       },
       productsIds: {
-        type: Sequelize.JSON,
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+      },
+      deliveryId:{
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       comment: {
         type: Sequelize.STRING,
+      },
+      status: {
         allowNull: false,
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

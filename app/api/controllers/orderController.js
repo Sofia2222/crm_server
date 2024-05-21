@@ -77,6 +77,16 @@ class OrderController {
             res.status(e.status || 500).json({error: e.error, e});
         }
     }
+
+    async getTableOrders(req, res) {
+        try{
+            const orders = await orderService.getAll();
+
+        }catch (e) {
+            console.log(e)
+            res.status(e.status || 500).json({error: e.error, e});
+        }
+    }
 }
 
 module.exports = new OrderController();

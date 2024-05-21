@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
         models.Contact.hasMany(models.Order, {
             foreignKey: 'contactId'
         })
+        models.Delivery.hasOne(models.Order, {
+          foreignKey: 'deliveryId'
+        })
     }
   }
   //storageId, userId, contactId, productsId, comment
@@ -36,13 +39,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    productsId: { // TODO ids
-      type: DataTypes.JSON,
+    productsIds: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+    },
+    deliveryId:{
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     comment: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    status: {
+      allowNull: false,
+      type: DataTypes.STRING,
     },
     createdAt: {
       allowNull: false,

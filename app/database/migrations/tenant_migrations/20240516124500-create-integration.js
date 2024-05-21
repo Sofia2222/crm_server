@@ -23,7 +23,6 @@ module.exports = {
       },
       options: {
         type: Sequelize.JSON,
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,

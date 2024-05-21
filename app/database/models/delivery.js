@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Delivery.init({
-    orderId: {
+    id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.INTEGER
