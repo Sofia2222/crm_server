@@ -81,7 +81,6 @@ class OrderController {
     async getTableOrders(req, res) {
         try{
             const orders = await orderService.getTableOrders();
-            console.log(orders)
             res.status(200).json({orders});
         }catch (e) {
             console.log(e)

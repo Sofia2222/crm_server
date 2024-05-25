@@ -32,6 +32,8 @@ class OrderService {
 
     async getTableOrders(){
 
+
+
         const result = []
         const orders = await db().Order.findAll({
             include: [
@@ -45,20 +47,28 @@ class OrderService {
                 }
             ]
         })
-        //TODO:
-        console.log(orders[0].dataValues.Contact.dataValues)
-        console.log(orders[0].dataValues.Delivery.dataValues)
 
         for(const order of orders){
-            console.log(order)
+
+            const products = []
+            let totalSumOrder = 0;
+            for (const id of order.dataValues.productsIds){
+                const product = await db().Product.findByPk(id, {
+                    attributes: ['id', 'title', 'price']
+                });
+                totalSumOrder += parseFloat(product.dataValues.price);
+                products.push(product);
+            }
+
+
             result.push({
                 numberOrder: order.dataValues.id,
                 createdAt: order.dataValues.createdAt,
                 pib: `${order.dataValues.Contact.dataValues.firstName} ${order.dataValues.Contact.dataValues.lastName} ${order.dataValues.Contact.dataValues.middleName}`,
-                products: {},
+                products: products,
                 status: order.dataValues.status,
-                suma: '',
-                delivery: `${order?.dataValues?.Delivery?.dataValues?.city} ${order.dataValues.Delivery.dataValues.warehouse}`,
+                suma: totalSumOrder,
+                delivery: `${order?.dataValues?.Delivery?.dataValues?.city}, ${order.dataValues.Delivery.dataValues.warehouse}`,
             });
         }
         return result;
