@@ -11,5 +11,5 @@ module.exports = {
     contactRouter,
     orderRouter,
     blackBoxRouter,
-    novaPoshtaRouter
-}
+    novaPoshtaRouter,
+};

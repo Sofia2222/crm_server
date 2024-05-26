@@ -1,11 +1,10 @@
-const fs = require("fs");
-const {Sequelize} = require("sequelize");
+const fs = require('fs');
+const { Sequelize } = require('sequelize');
 const config = require('./config.json').development;
-
 
 class Database {
     constructor(Sequelize) {
-        if (!Database.instance){
+        if (!Database.instance) {
             this.Sequelize = Sequelize;
             this.config = config;
             this.tenantConnections = {};
@@ -17,51 +16,58 @@ class Database {
         }
     }
 
-    buildMainORM(){
+    buildMainORM() {
         this.mainORM = this.importModels(this.mainConnection);
     }
 
-    async getDbTenants(){
-        return (await this.mainConnection.query('SELECT * FROM "Tenants"', {
-            type: this.Sequelize.QueryTypes.SELECT
-        }));
+    async getDbTenants() {
+        return await this.mainConnection.query('SELECT * FROM "Tenants"', {
+            type: this.Sequelize.QueryTypes.SELECT,
+        });
     }
 
     setMainORM() {
-        this.currentORM = this.mainORM
+        this.currentORM = this.mainORM;
     }
 
-    async buildTenantConnection(){
+    async buildTenantConnection() {
         const tenants = await this.getDbTenants();
-        for(const tenant of tenants){
-            this.tenantConnections[tenant.subdomain] = new this.Sequelize(tenant.dbName, this.config.username, this.config.password, this.config);
+        for (const tenant of tenants) {
+            this.tenantConnections[tenant.subdomain] = new this.Sequelize(
+                tenant.dbName,
+                this.config.username,
+                this.config.password,
+                this.config,
+            );
         }
     }
 
-    async buildTenantORMs(){
-        if (Object.keys(this.tenantConnections).length === 0){
+    async buildTenantORMs() {
+        if (Object.keys(this.tenantConnections).length === 0) {
             await this.buildTenantConnection();
         }
-        for(const tenant in this.tenantConnections){
-            this.tenantORMs[tenant] = this.importModels(this.tenantConnections[tenant]);
+        for (const tenant in this.tenantConnections) {
+            this.tenantORMs[tenant] = this.importModels(
+                this.tenantConnections[tenant],
+            );
         }
     }
 
-    getCurrentORM(){
+    getCurrentORM() {
         if (!this.currentORM) {
-            throw new Error('No current db set')
+            throw new Error('No current db set');
         }
         return this.currentORM;
     }
 
-    setCurrentORM(subdomain){
-        if (! this.tenantORMs[subdomain]) {
-            throw new Error(`No tenant with subdomain ${subdomain}`)
+    setCurrentORM(subdomain) {
+        if (!this.tenantORMs[subdomain]) {
+            throw new Error(`No tenant with subdomain ${subdomain}`);
         }
         this.currentORM = this.tenantORMs[subdomain];
     }
 
-    async createTenant({fistName, lastName, phone, subdomain}){
+    async createTenant({ fistName, lastName, phone, subdomain }) {
         subdomain = subdomain.toLowerCase();
         const tenant = await this.mainORM.Tenant.create({
             fistName,
@@ -72,52 +78,66 @@ class Database {
             status: 'active',
         });
 
-        await this.mainConnection.query(`CREATE DATABASE tenant_${subdomain}`)
+        await this.mainConnection.query(`CREATE DATABASE tenant_${subdomain}`);
 
-        this.tenantConnections[subdomain] = new this.Sequelize(`tenant_${subdomain}`, this.config.username, this.config.password, this.config)
+        this.tenantConnections[subdomain] = new this.Sequelize(
+            `tenant_${subdomain}`,
+            this.config.username,
+            this.config.password,
+            this.config,
+        );
 
         await this.migrateTenant(this.tenantConnections[subdomain]);
 
-        this.tenantORMs[subdomain] = this.importModels(this.tenantConnections[subdomain])
+        this.tenantORMs[subdomain] = this.importModels(
+            this.tenantConnections[subdomain],
+        );
 
         return tenant;
     }
 
-    async migrateTenant(connection){
-
-        const migrateFiles = fs.readdirSync(`${__dirname}/migrations/tenant_migrations`).filter(file => { return (file.slice(-3) === '.js')});
-        for (const file of migrateFiles){
-            const migration = require(`${__dirname}/migrations/tenant_migrations/${file}`);
-            await migration.up(connection.getQueryInterface(), Sequelize)
-            console.log(file)
+    async migrateTenant(connection) {
+        const migrateFiles = fs
+            .readdirSync(`${__dirname}/migrations/tenant_migrations`)
+            .filter((file) => {
+                return file.slice(-3) === '.js';
+            });
+        for (const file of migrateFiles) {
+            const migration = require(
+                `${__dirname}/migrations/tenant_migrations/${file}`,
+            );
+            await migration.up(connection.getQueryInterface(), Sequelize);
+            console.log(file);
         }
 
-        const constraintFiles = fs.readdirSync(`${__dirname}/migrations/tenant_migrations/constraints`);
-        for (const file of constraintFiles){
-            const migration = require(`${__dirname}/migrations/tenant_migrations/constraints/${file}`);
-            await migration.up(connection.getQueryInterface(), Sequelize)
-            console.log(file)
+        const constraintFiles = fs.readdirSync(
+            `${__dirname}/migrations/tenant_migrations/constraints`,
+        );
+        for (const file of constraintFiles) {
+            const migration = require(
+                `${__dirname}/migrations/tenant_migrations/constraints/${file}`,
+            );
+            await migration.up(connection.getQueryInterface(), Sequelize);
+            console.log(file);
         }
     }
-
-
 
     importModels(connection) {
         const orm = {};
         const files = _getModelFiles();
-        files.forEach(file => {
+        files.forEach((file) => {
             const model = require(`${__dirname}/models/${file}`)(
                 connection,
-                this.Sequelize.DataTypes
+                this.Sequelize.DataTypes,
             );
             orm[model.name] = model;
-        })
+        });
 
-        Object.keys(orm).forEach(model => {
-            if (orm[model].associate){
+        Object.keys(orm).forEach((model) => {
+            if (orm[model].associate) {
                 orm[model].associate(orm);
             }
-        })
+        });
         orm.sequelize = connection;
         orm.Sequelize = this.Sequelize;
         return orm;
@@ -127,7 +147,7 @@ class Database {
 const _getModelFiles = () => {
     return fs
         .readdirSync(`${__dirname}/models`)
-        .filter(file => file !== 'index.js');
-}
+        .filter((file) => file !== 'index.js');
+};
 
 module.exports = Database;

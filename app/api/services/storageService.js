@@ -1,18 +1,20 @@
-const { Conflict} = require("../utils/Errors");
-const {db} = require("../../database/models");
+const { Conflict } = require('../utils/Errors');
+const { db } = require('../../database/models');
 
 class StorageService {
-    async create(storageName){
+    async create(storageName) {
         const candidateStorage = await db().Storage.findOne({
-            where: [{
-                'storageName': storageName
-            }]
+            where: [
+                {
+                    storageName: storageName,
+                },
+            ],
         });
 
-        if (candidateStorage !== null){
+        if (candidateStorage !== null) {
             throw new Conflict('Така база даних є!');
         }
-        return await db().Storage.create({storageName});
+        return await db().Storage.create({ storageName });
     }
 }
 

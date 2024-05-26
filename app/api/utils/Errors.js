@@ -55,5 +55,5 @@ module.exports = {
     NotFound,
     Forbidden,
     Unauthorized,
-    BadRequest
+    BadRequest,
 };

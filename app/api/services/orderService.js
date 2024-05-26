@@ -1,65 +1,92 @@
-const {db} = require("../../database/models");
+const { db } = require('../../database/models');
 
 class OrderService {
     async getAll() {
         return await db().Order.findAll();
     }
     async getById(id) {
-        return await db().Order.findOne({where: [{id: id}]});
+        return await db().Order.findOne({ where: [{ id: id }] });
     }
-    async getByLimit({limit, offset}){
-        return await db().Order.findAll({limit: limit, offset: offset});
+    async getByLimit({ limit, offset }) {
+        return await db().Order.findAll({ limit: limit, offset: offset });
     }
-    async create({storageId, userId, contactId, productsId, deliveryId, comment, status})
-    {
-        return await db().Order.create(
-            {storageId, userId, contactId, productsId, deliveryId, comment, status}
-        );
+    async create({
+        storageId,
+        userId,
+        contactId,
+        productsId,
+        deliveryId,
+        comment,
+        status,
+    }) {
+        return await db().Order.create({
+            storageId,
+            userId,
+            contactId,
+            productsId,
+            deliveryId,
+            comment,
+            status,
+        });
     }
-    async update({storageId, userId, contactId, productsId, deliveryId, comment, status}) {
+    async update({
+        storageId,
+        userId,
+        contactId,
+        productsId,
+        deliveryId,
+        comment,
+        status,
+    }) {
         return await db().Order.update(
-            {storageId, userId, contactId, productsId, deliveryId, comment, status},
             {
-                where: {id: id}
-            }
+                storageId,
+                userId,
+                contactId,
+                productsId,
+                deliveryId,
+                comment,
+                status,
+            },
+            {
+                where: { id: id },
+            },
         );
     }
-    async delete(id){
-        return await db().Order.destroy(
-            {where: [{id: id}]}
-        );
+    async delete(id) {
+        return await db().Order.destroy({ where: [{ id: id }] });
     }
 
-    async getTableOrders(){
-
-
-
-        const result = []
+    async getTableOrders() {
+        const result = [];
         const orders = await db().Order.findAll({
             include: [
                 {
                     model: await db().Contact,
-                    attributes: ['firstName', 'lastName', 'middleName', 'email'],
+                    attributes: [
+                        'firstName',
+                        'lastName',
+                        'middleName',
+                        'email',
+                    ],
                 },
                 {
                     model: await db().Delivery,
                     attributes: ['city', 'warehouse'],
-                }
-            ]
-        })
+                },
+            ],
+        });
 
-        for(const order of orders){
-
-            const products = []
+        for (const order of orders) {
+            const products = [];
             let totalSumOrder = 0;
-            for (const id of order.dataValues.productsIds){
+            for (const id of order.dataValues.productsIds) {
                 const product = await db().Product.findByPk(id, {
-                    attributes: ['id', 'title', 'price']
+                    attributes: ['id', 'title', 'price'],
                 });
                 totalSumOrder += parseFloat(product.dataValues.price);
                 products.push(product);
             }
-
 
             result.push({
                 numberOrder: order.dataValues.id,
