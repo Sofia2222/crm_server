@@ -25,13 +25,13 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
             },
             price: {
-                type: DataTypes.STRING,
+                type: DataTypes.DECIMAL,
             },
             firstCost: {
-                type: DataTypes.STRING,
+                type: DataTypes.DECIMAL,
             },
             sale: {
-                type: DataTypes.STRING,
+                type: DataTypes.DECIMAL,
             },
             dateSale: {
                 type: DataTypes.DATE,

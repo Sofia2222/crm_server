@@ -74,6 +74,15 @@ module.exports = {
             onDelete: 'cascade',
             onUpdate: 'cascade',
         });
+
+        await queryInterface.addConstraint('Orders', {
+            fields: ['statusId'],
+            type: 'foreign key',
+            name: 'orders_status',
+            references: { table: 'Statuses', field: 'id' },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
         await queryInterface.addConstraint('Deliveries', {
             fields: ['integrationId'],
             type: 'foreign key',

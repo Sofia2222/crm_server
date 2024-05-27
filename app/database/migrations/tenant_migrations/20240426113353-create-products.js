@@ -17,13 +17,13 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             price: {
-                type: Sequelize.STRING,
+                type: Sequelize.DECIMAL,
             },
             firstCost: {
-                type: Sequelize.STRING,
+                type: Sequelize.DECIMAL,
             },
             sale: {
-                type: Sequelize.STRING,
+                type: Sequelize.DECIMAL,
             },
             dateSale: {
                 type: Sequelize.DATE,
