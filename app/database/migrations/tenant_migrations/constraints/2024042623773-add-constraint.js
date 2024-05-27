@@ -82,5 +82,29 @@ module.exports = {
             onDelete: 'cascade',
             onUpdate: 'cascade',
         });
+        await queryInterface.addConstraint('Statuses', {
+            fields: ['storageId'],
+            type: 'foreign key',
+            name: 'statuses_storage',
+            references: { table: 'Storages', field: 'id' },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
+        await queryInterface.addConstraint('Payments', {
+            fields: ['orderId'],
+            type: 'foreign key',
+            name: 'payments_orders',
+            references: { table: 'Orders', field: 'id' },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
+        await queryInterface.addConstraint('Notifications', {
+            fields: ['storageId'],
+            type: 'foreign key',
+            name: 'notifications_storages',
+            references: { table: 'Storages', field: 'id' },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
     },
 };
