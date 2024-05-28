@@ -4,44 +4,33 @@ const { Conflict } = require('../utils/Errors');
 class StatusController {
     async getStatuses(req, res) {
         try {
-            const contacts = await statusService.getAll();
-            return res.status(200).json({ contacts });
+            const statuses = await statusService.getAll();
+            return res.status(200).json({ statuses });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
         }
     }
-    async getContactById(req, res) {
+    async getStatusById(req, res) {
         try {
             const { id } = req.params;
             if (id <= 0) {
                 throw new Conflict('Не коректно введений id');
             }
-            const contact = await statusService.getById(id);
-            return res.status(200).json({ contact: contact || {} });
+            const status = await statusService.getById(id);
+            return res.status(200).json({ status: status || {} });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
         }
     }
-    async getContactsByLimit(req, res) {
-        try {
-            const { limit, offset } = req.params;
-            console.log(limit, offset);
-            const contact = await statusService.getByLimit({ limit, offset });
-            return res.status(200).json({ contact });
-        } catch (e) {
-            console.log(e);
-            res.status(e.status || 500).json({ error: e.error, e });
-        }
-    }
-    async createContact(req, res) {
+    async createStatus(req, res) {
         try {
             const userPayload = req.userPayload;
             const { firstName, lastName, middleName, phone, email, comment } =
                 req.body;
 
-            const contact = await statusService.create({
+            const status = await statusService.create({
                 firstName,
                 lastName,
                 middleName,
@@ -50,13 +39,13 @@ class StatusController {
                 comment,
                 storageId: 1,
             }); //TODO: storage
-            return res.status(200).json({ contact });
+            return res.status(200).json({ status });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
         }
     }
-    async updateContact(req, res) {
+    async updateStatus(req, res) {
         try {
             const userPayload = req.userPayload;
             const {
@@ -69,7 +58,7 @@ class StatusController {
                 comment,
             } = req.body;
 
-            const contact = await contactService.update({
+            const status = await statusService.update({
                 id,
                 firstName,
                 lastName,
@@ -80,20 +69,20 @@ class StatusController {
                 storageId: 1,
             }); //TODO: from payload
 
-            return res.status(200).json({ contact });
+            return res.status(200).json({ status });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
         }
     }
-    async deleteContact(req, res) {
+    async deleteStatus(req, res) {
         try {
             const { id } = req.body;
             if (id <= 0) {
                 throw new Conflict('Не коректно введений id');
             }
-            const contact = await contactService.delete(id);
-            return res.status(200).json({ contact });
+            const status = await statusService.delete(id);
+            return res.status(200).json({ status });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });

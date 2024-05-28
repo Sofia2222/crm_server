@@ -8,4 +8,4 @@ notificationRouter.post('/create', tenantify, notificationController.createNotif
 notificationRouter.post('/update', tenantify, notificationController.updateNotification);
 notificationRouter.post('/delete', tenantify, notificationController.deleteNotification);
 
-module.exports = paymentRouter;
+module.exports = notificationRouter;
