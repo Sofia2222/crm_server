@@ -7,7 +7,8 @@ module.exports = {
       {
         storageId: 1,
         name: 'NovaPoshta',
-        options: {},
+        active: true,
+        options: null,
         createdAt: new Date(),
         updatedAt: new Date()
       }

@@ -21,12 +21,8 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            productsIds: {
-                type: Sequelize.ARRAY(Sequelize.JSON),
-            },
             deliveryId: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
             },
             comment: {
                 type: Sequelize.STRING,

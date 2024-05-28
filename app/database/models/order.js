@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
             models.Order.hasOne(models.Status, {
                 foreignKey: 'statusId',
             })
+            models.Order.belongsToMany(models.Product, {
+                through: models.OrderRefProduct,
+                foreignKey: 'orderId',
+                otherKey: 'productId',
+            })
         }
     }
     //storageId, userId, contactId, productsId, comment
@@ -40,9 +45,6 @@ module.exports = (sequelize, DataTypes) => {
             contactId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-            },
-            productsIds: {
-                type: DataTypes.ARRAY(DataTypes.JSON),
             },
             deliveryId: {
                 type: DataTypes.INTEGER,

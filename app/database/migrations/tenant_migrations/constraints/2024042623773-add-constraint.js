@@ -115,5 +115,21 @@ module.exports = {
             onDelete: 'cascade',
             onUpdate: 'cascade',
         });
+        await queryInterface.addConstraint('OrdersRefProducts', {
+            fields: ['orderId'],
+            type: 'foreign key',
+            name: 'orders_products',
+            references: { table: 'Orders', field: 'id' },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
+        await queryInterface.addConstraint('OrdersRefProducts', {
+            fields: ['productId'],
+            type: 'foreign key',
+            name: 'products_orders',
+            references: { table: 'Products', field: 'id' },
+            onDelete: 'cascade',
+            onUpdate: 'cascade',
+        });
     },
 };
