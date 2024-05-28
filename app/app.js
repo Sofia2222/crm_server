@@ -32,14 +32,14 @@ app.use(
 );
 
 app.use('/auth', authRouter);
-app.use('/api/product', productRouter);
-app.use('/api/contact', contactRouter);
-app.use('/api/order', orderRouter);
+app.use('/api/products', productRouter);
+app.use('/api/contacts', contactRouter);
+app.use('/api/orders', orderRouter);
 app.use('/api/blackBox', blackBoxRouter);
 app.use('/api/novaPoshta', novaPoshtaRouter);
-app.use('/api/status', statusRouter);
-app.use('/api/notification', notificationRouter);
-app.use('/api/paymentRouter', paymentRouter);
+app.use('/api/statuses', statusRouter);
+app.use('/api/notifications', notificationRouter);
+app.use('/api/payments', paymentRouter);
 
 const start = async () => {
     app.listen(PORT, () => {

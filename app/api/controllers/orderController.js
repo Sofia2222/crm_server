@@ -102,8 +102,19 @@ class OrderController {
 
     async getTableOrders(req, res) {
         try {
-            const orders = await orderService.getTableOrders();
+            const {limit, offset } = req.query;
+            const orders = await orderService.getTableOrders({limit, offset });
             res.status(200).json({ orders });
+        } catch (e) {
+            console.log(e);
+            res.status(e.status || 500).json({ error: e.error, e });
+        }
+    }
+    
+    async getOrdersCount(req, res) {
+        try {
+            const count = await orderService.getCount();
+            res.status(200).json(count);
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
