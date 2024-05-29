@@ -74,6 +74,7 @@ class OrderService {
             }
 
             result.push({
+                id: order.id,
                 numberOrder: order.dataValues.id,
                 createdAt: order.dataValues.createdAt,
                 pib: `${order.dataValues.Contact.dataValues.firstName} ${order.dataValues.Contact.dataValues.lastName} ${order.dataValues.Contact.dataValues.middleName}`,
@@ -83,6 +84,7 @@ class OrderService {
                     backgroundColor: order.dataValues.Status.backgroundColor,
                 },
                 suma: totalSumOrder,
+                paymentSuma: 0,
                 delivery: order?.dataValues?.Delivery === null ? null : `${order?.dataValues?.Delivery?.dataValues?.city}, ${order?.dataValues?.Delivery?.dataValues?.warehouse}`,
             });
         }
