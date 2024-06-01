@@ -57,7 +57,7 @@ class OrderService {
                 },
                 {
                     model: db().Status,
-                    attributes: ['name', 'backgroundColor'],
+                    attributes: ['id', 'name', 'backgroundColor'],
                 }
             ],
             limit: limit,
@@ -80,6 +80,7 @@ class OrderService {
                 pib: `${order.dataValues.Contact.dataValues.firstName} ${order.dataValues.Contact.dataValues.lastName} ${order.dataValues.Contact.dataValues.middleName}`,
                 products: products,
                 status: {
+                    id: order.dataValues.Status.id,
                     name: order.dataValues.Status.name,
                     backgroundColor: order.dataValues.Status.backgroundColor,
                 },
