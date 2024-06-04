@@ -21,7 +21,6 @@ const { singlify, tenantify } = require('../../database/models');
 
 authRouter.post('/signIn', singlify, authController.signIn);
 authRouter.post('/signUp', singlify, authController.signUpTenant);
-
 authRouter.post('/logout', tenantify, authController.logout);
 authRouter.get('/refresh', tenantify, authController.refresh);
 

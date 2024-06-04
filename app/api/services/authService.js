@@ -34,12 +34,12 @@ class AuthService {
             throw new Conflict('Не вірний пароль!');
         }
 
-        const payload = { userId: user.id, subdomain: subdomain };
+        const payload = { userId: user.id, storageId: user.storageId }
 
         const accessToken = await tokenService.generateAccessToken(payload);
         const refreshToken = await tokenService.generateRefreshToken(payload);
 
-        const token = await db().Token.create({
+        await db().Token.create({
             token: refreshToken,
             fingerprint: fingerprint.hash,
             userId: user.id,
@@ -52,15 +52,7 @@ class AuthService {
         };
     }
 
-    async signUpTenant({
-        firstName,
-        lastName,
-        email,
-        phone,
-        password,
-        subdomain,
-        fingerprint,
-    }) {
+    async signUpTenant({firstName, lastName, email, phone, password, subdomain, fingerprint,}) {
         const candidate = await db().Tenant.findOne({
             where: [{ subdomain: subdomain }],
         });
@@ -100,18 +92,19 @@ class AuthService {
     }
 
     async refresh({ curRefreshToken, fingerprint }) {
+        console.log('Refresh')
         console.log(curRefreshToken);
         if (!curRefreshToken) {
-            throw new Unauthorized();
+            throw new Unauthorized('Токен пустий.');
         }
         const token = await db().Token.findOne({
             where: { token: curRefreshToken },
         });
         if (token === null) {
-            throw new Unauthorized();
+            throw new Unauthorized('Токену немає в базі.');
         }
         if (token.fingerprint !== fingerprint.hash) {
-            throw new Forbidden();
+            throw new Forbidden('Помилка авторизації!');
         }
         await db().Token.destroy({
             where: {
@@ -122,7 +115,7 @@ class AuthService {
         try {
             payload = await tokenService.verifyRefreshToken(curRefreshToken);
         } catch (e) {
-            throw new Forbidden();
+            throw new Forbidden('Токен не авторізований!');
         }
         const user = await db().User.findOne({
             where: [
@@ -136,12 +129,12 @@ class AuthService {
             await tokenService.generateAccessToken(actualPayload);
         const newRefreshToken =
             await tokenService.generateRefreshToken(actualPayload);
-        const newToken = await db().Token.create({
+
+        await db().Token.create({
             userId: user.id,
             token: newRefreshToken,
             fingerprint: fingerprint.hash,
         });
-        await newToken.save();
         return {
             newAccessToken,
             newRefreshToken,

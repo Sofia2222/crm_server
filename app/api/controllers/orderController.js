@@ -2,15 +2,6 @@ const orderService = require('../services/orderService');
 const { Conflict } = require('../utils/Errors');
 
 class OrderController {
-    async getOrders(req, res) {
-        try {
-            const orders = await orderService.getAll();
-            return res.status(200).json({ orders });
-        } catch (e) {
-            console.log(e);
-            res.status(e.status || 500).json({ error: e.error, e });
-        }
-    }
     async getOrderById(req, res) {
         try {
             const { id } = req.params;
@@ -58,28 +49,9 @@ class OrderController {
     }
     async updateOrder(req, res) {
         try {
-            const userPayload = req.userPayload;
-            const {
-                id,
-                firstName,
-                lastName,
-                middleName,
-                phone,
-                email,
-                comment,
-            } = req.body;
-
-            const order = await orderService.update({
-                id,
-                firstName,
-                lastName,
-                middleName,
-                phone,
-                email,
-                comment,
-                storageId: 1,
-            }); //TODO: from payload
-
+            const { id, params} = req.body;
+            console.log(id, params)
+            const order = await orderService.update({id, params});
             return res.status(200).json({ order });
         } catch (e) {
             console.log(e);
@@ -110,7 +82,7 @@ class OrderController {
             res.status(e.status || 500).json({ error: e.error, e });
         }
     }
-    
+
     async getOrdersCount(req, res) {
         try {
             const count = await orderService.getCount();

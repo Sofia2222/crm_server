@@ -13,9 +13,8 @@ class AuthController {
                     subdomain,
                     fingerprint,
                 });
-            console.log(refreshToken);
             res.cookie('refreshToken', refreshToken, constants.COOKIE_SETTINGS);
-            res.status(200).json({ accessToken, accessTokenExpiration });
+            res.status(200).json({ accessToken, subdomain, accessTokenExpiration });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
@@ -40,10 +39,10 @@ class AuthController {
                 });
             console.log(refreshToken);
             res.cookie('refreshToken', refreshToken, constants.COOKIE_SETTINGS);
-            res.status(200).json({ accessToken, accessTokenExpiration });
+            res.status(200).json({ accessToken, subdomain, accessTokenExpiration });
         } catch (e) {
             console.log(e);
-            res.status(e.status || 500).json({ error: e.error, e });
+            res.status(e.status || 500).json({ error: e });
         }
     }
 
@@ -56,7 +55,7 @@ class AuthController {
             res.status(200).json();
         } catch (e) {
             console.log(e);
-            res.status(e.status || 500).json({ error: e.error, e });
+            res.status(e.status || 500).json({ error: e });
         }
     }
     async refresh(req, res) {
@@ -73,7 +72,7 @@ class AuthController {
             res.status(200).json({ newAccessToken, accessTokenExpiration });
         } catch (e) {
             console.log(e);
-            res.status(e.status || 500).json({ error: e.error, e });
+            res.status(e.status || 500).json({ error: e });
         }
     }
 }

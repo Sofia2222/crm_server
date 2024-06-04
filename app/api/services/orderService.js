@@ -15,21 +15,8 @@ class OrderService {
             status,
         });
     }
-    async update({storageId, userId, contactId, productsId, deliveryId, comment, status,}) {
-        return await db().Order.update(
-            {
-                storageId,
-                userId,
-                contactId,
-                productsId,
-                deliveryId,
-                comment,
-                status,
-            },
-            {
-                where: { id: id },
-            },
-        );
+    async update({id, params}) {
+        return await db().Order.update({...params}, {where: { id: id }});
     }
     async delete(id) {
         return await db().Order.destroy({ where: [{ id: id }] });
@@ -37,6 +24,7 @@ class OrderService {
     async getTableOrders({limit=10, offset=0}) {
         const result = [];
         const orders = await db().Order.findAll({
+            order: [['id', 'DESC'], ['createdAt', 'ASC']],
             include: [
                 {
                     model: db().Contact,
