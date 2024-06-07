@@ -13,17 +13,17 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       method: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       amount: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL,
         allowNull: false,
       },
       comment: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       holderName: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       outsideOrderId: {
         type: Sequelize.INTEGER,

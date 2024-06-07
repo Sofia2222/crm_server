@@ -21,17 +21,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     method: {
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     },
     amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL,
       allowNull: false,
     },
     comment: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     holderName: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     outsideOrderId: {
       type: DataTypes.INTEGER,

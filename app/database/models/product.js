@@ -21,20 +21,11 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
-            titleForDocuments: {
-                type: DataTypes.STRING,
-            },
             price: {
                 type: DataTypes.DECIMAL,
             },
             firstCost: {
                 type: DataTypes.DECIMAL,
-            },
-            sale: {
-                type: DataTypes.DECIMAL,
-            },
-            dateSale: {
-                type: DataTypes.DATE,
             },
             comment: {
                 type: DataTypes.STRING,

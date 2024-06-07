@@ -13,20 +13,11 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            titleForDocuments: {
-                type: Sequelize.STRING,
-            },
             price: {
                 type: Sequelize.DECIMAL,
             },
             firstCost: {
                 type: Sequelize.DECIMAL,
-            },
-            sale: {
-                type: Sequelize.DECIMAL,
-            },
-            dateSale: {
-                type: Sequelize.DATE,
             },
             comment: {
                 type: Sequelize.STRING,

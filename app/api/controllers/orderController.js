@@ -1,26 +1,12 @@
 const orderService = require('../services/orderService');
-const { Conflict } = require('../utils/Errors');
 
 class OrderController {
     async getOrderById(req, res) {
         try {
             const { id } = req.params;
-            if (id <= 0) {
-                throw new Conflict('Не коректно введений id');
-            }
             const order = await orderService.getById(id);
-            return res.status(200).json({ order: order || {} });
-        } catch (e) {
-            console.log(e);
-            res.status(e.status || 500).json({ error: e.error, e });
-        }
-    }
-    async getOrdersByLimit(req, res) {
-        try {
-            const { limit, offset } = req.params;
-            console.log(limit, offset);
-            const orders = await orderService.getByLimit({ limit, offset });
-            return res.status(200).json({ orders });
+            console.log(order)
+            return res.status(200).json({ order });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });

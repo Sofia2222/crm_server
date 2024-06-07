@@ -21,9 +21,13 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
+            amountPayments: {
+                type: Sequelize.DECIMAL,
+            },
             deliveryId: {
                 type: Sequelize.INTEGER,
             },
+
             comment: {
                 type: Sequelize.STRING,
             },

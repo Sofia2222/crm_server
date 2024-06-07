@@ -17,8 +17,6 @@ class UserService {
     }) {
         const options = {};
 
-        //TODO: if('admin') -> admin option else manager option
-
         const candidate = await db().User.findOne({
             where: [
                 {

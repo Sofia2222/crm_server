@@ -4,16 +4,8 @@ class OrderService {
     async getById(id) {
         return await db().Order.findOne({ where: [{ id: id }] });
     }
-    async create({storageId, userId, contactId, productsId, deliveryId, comment, status,}) {
-        return await db().Order.create({
-            storageId,
-            userId,
-            contactId,
-            productsId,
-            deliveryId,
-            comment,
-            status,
-        });
+    async create({order, storageId}) {
+        return await db().Order.create({order, storageId});
     }
     async update({id, params}) {
         return await db().Order.update({...params}, {where: { id: id }});
@@ -46,11 +38,12 @@ class OrderService {
                 {
                     model: db().Status,
                     attributes: ['id', 'name', 'backgroundColor'],
-                }
+                },
             ],
             limit: limit,
             offset: offset
         });
+
 
 
         for (const order of orders) {
@@ -60,12 +53,17 @@ class OrderService {
                 products.push(product.dataValues);
                 totalSumOrder += (parseFloat(product.dataValues.price || 0)*parseFloat(product.OrderRefProduct.amount));
             }
-
+            const payments = await db().Payment.findAll({where: [{ orderId: order.id }]});
+            let totalPayments = 0;
+            console.log(payments[0]?.dataValues)
+            for (const payment of payments) {
+                totalPayments += parseFloat(payment?.dataValues?.amount);
+            }
             result.push({
                 id: order.id,
                 numberOrder: order.dataValues.id,
                 createdAt: order.dataValues.createdAt,
-                pib: `${order.dataValues.Contact.dataValues.firstName} ${order.dataValues.Contact.dataValues.lastName} ${order.dataValues.Contact.dataValues.middleName}`,
+                pib: `${order.dataValues.Contact.dataValues.lastName} ${order.dataValues.Contact.dataValues.firstName} ${order.dataValues.Contact.dataValues.middleName}`,
                 products: products,
                 status: {
                     id: order.dataValues.Status.id,
@@ -73,7 +71,7 @@ class OrderService {
                     backgroundColor: order.dataValues.Status.backgroundColor,
                 },
                 suma: totalSumOrder,
-                paymentSuma: 0,
+                amountPayments: totalPayments,
                 delivery: order?.dataValues?.Delivery === null ? null : `${order?.dataValues?.Delivery?.dataValues?.city}, ${order?.dataValues?.Delivery?.dataValues?.warehouse}`,
             });
         }

@@ -1,10 +1,11 @@
-const paymentService = require('../services/statusService');
-const { Conflict } = require('../utils/Errors');
+const paymentService = require('../services/paymentService');
 
 class PaymentController {
-    async getPayments(req, res) {
+    async getPaymentsByLimit(req, res) {
         try {
-            const payments = await paymentService.getAll();
+            const { limit, offset } = req.query;
+            const payments = await paymentService.getByLimit({ limit, offset });
+            console.log(payments)
             return res.status(200).json({ payments });
         } catch (e) {
             console.log(e);
@@ -14,11 +15,8 @@ class PaymentController {
     async getPaymentById(req, res) {
         try {
             const { id } = req.params;
-            if (id <= 0) {
-                throw new Conflict('Не коректно введений id');
-            }
             const payment = await paymentService.getById(id);
-            return res.status(200).json({ payment: payment || {} });
+            return res.status(200).json({ payment});
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
@@ -26,20 +24,12 @@ class PaymentController {
     }
     async createPayment(req, res) {
         try {
-            const userPayload = req.userPayload;
-            const { firstName, lastName, middleName, phone, email, comment } =
-                req.body;
-
-            const payment = await paymentService.create({
-                firstName,
-                lastName,
-                middleName,
-                phone,
-                email,
-                comment,
-                storageId: 1,
-            }); //TODO: storage
-            return res.status(200).json({ payment });
+            const {storageId} = req.userPayload;
+            const { payment } = req.body;
+            const paymentResponse = await paymentService.create({
+                payment, storageId
+            });
+            return res.status(200).json({ paymentResponse });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
@@ -47,29 +37,14 @@ class PaymentController {
     }
     async updatePayment(req, res) {
         try {
-            const userPayload = req.userPayload;
-            const {
+            const {storageId} = req.userPayload;
+            const {id, payment} = req.body;
+            const paymentResponse = await paymentService.update({
                 id,
-                firstName,
-                lastName,
-                middleName,
-                phone,
-                email,
-                comment,
-            } = req.body;
-
-            const payment = await paymentService.update({
-                id,
-                firstName,
-                lastName,
-                middleName,
-                phone,
-                email,
-                comment,
-                storageId: 1,
-            }); //TODO: from payload
-
-            return res.status(200).json({ payment });
+                payment,
+                storageId,
+            });
+            return res.status(200).json({ paymentResponse });
         } catch (e) {
             console.log(e);
             res.status(e.status || 500).json({ error: e.error, e });
@@ -78,9 +53,6 @@ class PaymentController {
     async deletePayment(req, res) {
         try {
             const { id } = req.body;
-            if (id <= 0) {
-                throw new Conflict('Не коректно введений id');
-            }
             const payment = await paymentService.delete(id);
             return res.status(200).json({ payment });
         } catch (e) {
