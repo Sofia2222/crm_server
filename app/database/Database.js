@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { Sequelize } = require('sequelize');
 const config = require('./config.json').development;
-const {status, products, contacts, integrations, orders, orderInProducts, deliveries} = require('../database/seeders')
+const {status, products, contacts, orders, orderInProducts, deliveries} = require('../database/seeders')
 
 class Database {
     constructor(Sequelize) {
@@ -126,7 +126,6 @@ class Database {
     async seedersTenant(subdomain) {
         const connection = this.tenantConnections[subdomain]
         await status.up(connection.getQueryInterface(), Sequelize);
-        await integrations.up(connection.getQueryInterface(), Sequelize);
         await contacts.up(connection.getQueryInterface(), Sequelize);
         await products.up(connection.getQueryInterface(), Sequelize);
         await deliveries.up(connection.getQueryInterface(), Sequelize);

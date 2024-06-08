@@ -1,4 +1,5 @@
 const { db } = require('../../database/models');
+const {Op, col, fn, where} = require("sequelize");
 
 class OrderService {
     async getById(id) {
@@ -12,6 +13,29 @@ class OrderService {
     }
     async delete(id) {
         return await db().Order.destroy({ where: [{ id: id }] });
+    }
+    async getAnalytics({from, to}) {
+        const orders = await db().Order.findAll({
+            include: [
+                {
+                    model: db().Product,
+                    attributes: ['id', 'title', 'price']
+                },
+            ],
+            attributes: [
+                [fn('DATE', col('Order.createdAt')), 'date'],
+                [fn('COUNT', col('Order.id')), 'orderCount']
+            ],
+            where: {
+                createdAt: {
+                    [Op.between]: [from, to]
+                },
+                statusId: '5'
+            },
+            group: ['date'],
+            order: [[col('date'), 'ASC']]
+        });
+        console.log(orders)
     }
     async getTableOrders({limit=10, offset=0}) {
         const result = [];

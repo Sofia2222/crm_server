@@ -8,11 +8,9 @@ const {
     productRouter,
     contactRouter,
     orderRouter,
-    blackBoxRouter,
-    novaPoshtaRouter,
-    notificationRouter,
     paymentRouter,
-    statusRouter
+    statusRouter,
+    analyticRouter
 } = require('./api/routers');
 const Fingerprint = require('express-fingerprint');
 const app = express();
@@ -35,11 +33,9 @@ app.use('/auth', authRouter);
 app.use('/api/products', productRouter);
 app.use('/api/contacts', contactRouter);
 app.use('/api/orders', orderRouter);
-app.use('/api/blackBox', blackBoxRouter);
-app.use('/api/novaPoshta', novaPoshtaRouter);
 app.use('/api/statuses', statusRouter);
-app.use('/api/notifications', notificationRouter);
 app.use('/api/payments', paymentRouter);
+app.use('/api/analytics', analyticRouter);
 
 const start = async () => {
     app.listen(PORT, () => {

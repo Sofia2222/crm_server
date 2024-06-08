@@ -9,10 +9,6 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            integrationId: {
-                allowNull: false,
-                type: Sequelize.INTEGER,
-            },
             city: {
                 allowNull: false,
                 type: Sequelize.STRING,

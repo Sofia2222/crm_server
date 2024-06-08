@@ -11,10 +11,6 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 type: DataTypes.INTEGER,
             },
-            integrationId: {
-                allowNull: false,
-                type: DataTypes.INTEGER,
-            },
             city: {
                 allowNull: false,
                 type: DataTypes.STRING,
